@@ -18,12 +18,12 @@ class LoginRequest(BaseModel):
 
 @router.post("/register")
 def register(request: RegisterRequest, db: Session = Depends(get_db)):
-    # Check karo email already exist toh nahi
+    # Check if email already exists
     existing = db.query(User).filter(User.email == request.email).first()
     if existing:
         raise HTTPException(status_code=400, detail="Email already registered!")
     
-    # Naya user banao
+    # Create new user
     user = User(
         username=request.username,
         email=request.email,
@@ -32,6 +32,7 @@ def register(request: RegisterRequest, db: Session = Depends(get_db)):
     db.add(user)
     db.commit()
     return {"message": "User registered successfully!"}
+
 
 @router.post("/login")
 def login(request: LoginRequest, db: Session = Depends(get_db)):
@@ -47,3 +48,4 @@ def login(request: LoginRequest, db: Session = Depends(get_db)):
     # Token banao
     token = create_access_token({"sub": user.email})
     return {"access_token": token, "token_type": "bearer"}
+
