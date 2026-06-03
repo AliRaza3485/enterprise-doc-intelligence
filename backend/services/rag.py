@@ -9,6 +9,7 @@ from langchain_core.output_parsers import StrOutputParser
 import os
 from dotenv import load_dotenv
 
+
 load_dotenv()
 
 embeddings = HuggingFaceEmbeddings(
@@ -19,7 +20,6 @@ llm = ChatGroq(
     api_key=os.getenv("GROQ_API_KEY"),
     model_name="llama-3.3-70b-versatile"
 )
-
 CHROMA_DIR = "./data/chroma"
 
 def process_document(file_path: str, doc_id: int):
@@ -47,6 +47,7 @@ def ask_question(doc_id: int, question: str):
         embedding_function=embeddings,
         collection_name=f"doc_{doc_id}"
     )
+
 
     retriever = vectorstore.as_retriever(search_kwargs={"k": 3})
 

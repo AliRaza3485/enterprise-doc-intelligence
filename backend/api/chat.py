@@ -18,14 +18,16 @@ def process_doc(doc_id: int, token: str = "", db: Session = Depends(get_db)):
     payload = verify_token(token)
     if not payload:
         raise HTTPException(status_code=401, detail="Please login first!")
+    
 
     # Document dhundo
     doc = db.query(Document).filter(Document.id == doc_id).first()
     if not doc:
         raise HTTPException(status_code=404, detail="Document not found!")
-
+   
     # File path banao
     file_path = f"./data/uploads/{doc.user_id}_{doc.filename}"
+
 
     # RAG pipeline chalao
     chunks = process_document(file_path, doc_id)
@@ -38,6 +40,7 @@ def process_doc(doc_id: int, token: str = "", db: Session = Depends(get_db)):
         "message": "Document processed!",
         "chunks_created": chunks
     }
+   
 
 @router.post("/ask")
 def ask(request: QuestionRequest, token: str = "", db: Session = Depends(get_db)):
