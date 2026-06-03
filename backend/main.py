@@ -3,13 +3,14 @@ from fastapi.middleware.cors import CORSMiddleware
 from database import engine, Base
 from api.auth import router as auth_router
 from api.document import router as document_router
+from api.chat import router as chat_router
 from models.document import Document
 
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="Enterprise Doc Intelligence", version="1.0.0")
-app.include_router(document_router)
 
+# Middleware PEHLE
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -17,7 +18,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Phir routers
 app.include_router(auth_router)
+app.include_router(document_router)
+app.include_router(chat_router)
 
 @app.get("/")
 def root():
