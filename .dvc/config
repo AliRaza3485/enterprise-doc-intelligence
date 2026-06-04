@@ -1,0 +1,4 @@
+[core]
+    remote = origin
+['remote "origin"']
+    url = https://dagshub.com/ar3080331/enterprise-doc-intelligence.dvc
