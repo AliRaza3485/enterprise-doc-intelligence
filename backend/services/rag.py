@@ -135,15 +135,15 @@ def ask_question(doc_id: int, question: str):
     # Jawab:
     # """)
     prompt = PromptTemplate.from_template("""
-You are a helpful assistant. Answer the question ONLY based on the context below.
-If the answer is not in the context, say "I don't know based on the provided document."
+     You are a helpful assistant. Answer the question ONLY based on the context below.
+     If the answer is not in the context, say "I don't know based on the provided document."
 
-Context:
-{context}
+     Context:
+     {context}
 
-Question: {question}
-Answer:
-""")
+     Question: {question}
+     Answer:
+     """)
 
     chain = (
         {"context": retriever, "question": RunnablePassthrough()}
