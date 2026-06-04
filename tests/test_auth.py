@@ -5,6 +5,7 @@ from main import app
 
 client = TestClient(app)
 
+
 def test_register():
     response = client.post("/auth/register", json={
         "username": "testuser99",
@@ -13,6 +14,7 @@ def test_register():
     })
     # Already registered bhi acceptable hai
     assert response.status_code in [200, 400]
+
 
 def test_login():
     # Pehle register karo

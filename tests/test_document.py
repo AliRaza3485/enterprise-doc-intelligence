@@ -13,19 +13,6 @@ def get_token():
     })
     return response.json()["access_token"]
 
-# def test_upload_document():
-#     token = get_token()
-#     with open("tests/sample.txt", "w") as f:
-#         f.write("This is a test document about AI and machine learning.")
-    
-#     with open("tests/sample.txt", "rb") as f:
-#         response = client.post(
-#             f"/documents/upload?token={token}",
-#             files={"file": ("sample.txt", f, "text/plain")}
-#         )
-#     assert response.status_code == 200
-#     assert response.json()["message"] == "File uploaded successfully!"
-
 def test_upload_document():
     token = get_token()
     
@@ -44,6 +31,7 @@ def test_upload_document():
             files={"file": ("sample.txt", f, "text/plain")}
         )
     assert response.status_code == 200
+   
 
 def test_list_documents():
     token = get_token()
