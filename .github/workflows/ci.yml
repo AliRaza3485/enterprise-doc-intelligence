@@ -25,14 +25,6 @@ jobs:
           pip install -r requirements.txt
           pip install pytest httpx  
 
-      # - name: Run tests
-      #   env:
-      #     GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
-      #     SECRET_KEY: ${{ secrets.SECRET_KEY }}
-      #     DAGSHUB_TOKEN: ${{ secrets.DAGSHUB_TOKEN }}
-      #   run: |
-      #     cd backend
-      #     pytest ../tests/ -v
       - name: Run tests
         env:
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
@@ -40,7 +32,5 @@ jobs:
           DAGSHUB_TOKEN: ${{ secrets.DAGSHUB_TOKEN }}
         run: |
           cd backend
-          python -c "import os; print('SECRET_KEY length:', len(os.getenv('SECRET_KEY', '')))"
           pytest ../tests/ -v
-    
-            
+     
