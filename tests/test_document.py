@@ -6,26 +6,26 @@ from main import app
 
 client = TestClient(app)
 
-# def get_token():
-#     response = client.post("/auth/login", json={
-#         "email": "test123@test.com",
-#         "password": "test123"
-#     })
-#     return response.json()["access_token"]
-def get_token():
-    # Pehle register karo
-    client.post("/auth/register", json={
-        "username": "logintest",
-        "email": "logintest@test.com",
-        "password": "test123"
-    })
-    # Phir login karo
-    response = client.post("/auth/login", json={
-        "email": "logintest@test.com",
-        "password": "test123"
-    })
-    return response.json()["access_token"]
 
+def get_token():
+    # Register karo
+    reg_response = client.post("/auth/register", json={
+        "username": "doctest",
+        "email": "doctest@test.com",
+        "password": "test123"
+    })
+    
+    # 200 ya 400 dono theek hain
+    assert reg_response.status_code in [200, 400]
+    
+    # Login karo
+    response = client.post("/auth/login", json={
+        "email": "doctest@test.com",
+        "password": "test123"
+    })
+    
+    assert response.status_code == 200
+    return response.json()["access_token"]
 def test_upload_document():
     token = get_token()
     
