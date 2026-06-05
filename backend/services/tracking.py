@@ -31,18 +31,17 @@ from dotenv import load_dotenv
 load_dotenv()
 
 def setup_mlflow():
-    # Token env se lo
     token = os.getenv("DAGSHUB_TOKEN", "")
     
-    # MLflow ko directly DagsHub se connect karo
-    # dagshub.init() nahi — wo browser maangta hai!
-    mlflow.set_tracking_uri(
-        "https://dagshub.com/ar3080331/enterprise-doc-intelligence.mlflow"
-    )
-    
-    # Credentials set karo
-    os.environ["MLFLOW_TRACKING_USERNAME"] = "ar3080331"
-    os.environ["MLFLOW_TRACKING_PASSWORD"] = token
+    if not token:
+        # CI mein token nahi → local tracking use karo
+        mlflow.set_tracking_uri("sqlite:///mlflow.db")
+    else:
+        mlflow.set_tracking_uri(
+            "https://dagshub.com/ar3080331/enterprise-doc-intelligence.mlflow"
+        )
+        os.environ["MLFLOW_TRACKING_USERNAME"] = "ar3080331"
+        os.environ["MLFLOW_TRACKING_PASSWORD"] = token
     
     mlflow.set_experiment("rag-experiments")
 
