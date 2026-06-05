@@ -13,10 +13,10 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-embeddings = HuggingFaceEmbeddings(
-    model_name="all-MiniLM-L6-v2"
-)
-# Yeh line add karo
+def get_embeddings():
+    return HuggingFaceEmbeddings(
+        model_name="all-MiniLM-L6-v2"
+    )
 setup_mlflow()
 
 llm = ChatGroq(
@@ -26,6 +26,7 @@ llm = ChatGroq(
 CHROMA_DIR = "./data/chroma"
 
 def process_document(file_path: str, doc_id: int):
+    embeddings = get_embeddings()
     loader = PyPDFLoader(file_path)
     documents = loader.load()
 
@@ -45,6 +46,7 @@ def process_document(file_path: str, doc_id: int):
     return len(chunks)
 
 def ask_question(doc_id: int, question: str):
+    embeddings = get_embeddings()
     vectorstore = Chroma(
         persist_directory=CHROMA_DIR,
         embedding_function=embeddings,
@@ -54,13 +56,6 @@ def ask_question(doc_id: int, question: str):
 
     retriever = vectorstore.as_retriever(search_kwargs={"k": 3})
 
-    # prompt = PromptTemplate.from_template("""
-    # Context se jawab do:
-    # {context}
-    
-    # Sawal: {question}
-    # Jawab:
-    # """)
     prompt = PromptTemplate.from_template("""
      You are a helpful assistant. Answer the question ONLY based on the context below.
      If the answer is not in the context, say "I don't know based on the provided document."
