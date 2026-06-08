@@ -7,8 +7,8 @@ function Dashboard({ token, onLogout, onChat }) {
     const [message, setMessage] = useState('');
 
     useEffect(() => {
-        fetchDocuments();
-    }, []);
+    fetchDocuments();
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     const fetchDocuments = async () => {
         try {
