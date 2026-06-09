@@ -18,14 +18,20 @@ def upload_document(
     token: str = "",
     db: Session = Depends(get_db)
 ):
-    # Token verify karo 
     payload = verify_token(token)
     if not payload:
         raise HTTPException(status_code=401, detail="Please login first!")
 
     user_email = payload.get("sub")
-    # File save karo 
-    doc, error = save_file(file, user_email, db)
+    
+    # ← Yeh add karo - user dhundho pehle
+    from models.user import User
+    user = db.query(User).filter(User.email == user_email).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found!")
+
+    # ← Ab user.id pass karo
+    doc, error = save_file(file, user.id, db)
     if error:
         raise HTTPException(status_code=400, detail=error)
     
@@ -37,14 +43,6 @@ def upload_document(
     }
 
 
-# @router.get("/list")
-# def list_documents(token: str = "", db: Session = Depends(get_db)):
-#     payload = verify_token(token)
-#     if not payload:
-#         raise HTTPException(status_code=401, detail="Please login first!")
-#     from models.document import Document
-#     docs = db.query(Document).all()
-#     return {"documents": [{"id": d.id, "filename": d.filename, "status": d.status} for d in docs]}
 @router.get("/list")
 def list_documents(token: str = "", db: Session = Depends(get_db)):
     payload = verify_token(token)
