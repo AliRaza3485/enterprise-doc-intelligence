@@ -10,10 +10,17 @@ Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="Enterprise Doc Intelligence", version="1.0.0")
 
-# Middleware PEHLE
+# # Middleware PEHLE
+# app.add_middleware(
+#     CORSMiddleware,
+#     allow_origins=["*"],
+#     allow_methods=["*"],
+#     allow_headers=["*"],
+# )
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
+    allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
